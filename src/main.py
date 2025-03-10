@@ -12,7 +12,7 @@ basic_auth = BasicAuth(app)
 
 
 @app.route('/')
-@basic_auth.required
+# @basic_auth.required
 def home():
     return render_template_string('''
         <h1>Análise de Sentimento</h1>
