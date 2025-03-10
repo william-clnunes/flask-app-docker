@@ -15,6 +15,8 @@ basic_auth = BasicAuth(app)
 # @basic_auth.required
 def home():
     return render_template_string('''
+        <h1>Gabriela, Te Amo ❤️</h1>
+        <h1>Amo nosso filho 🦁💙</h1>
         <h1>Análise de Sentimento</h1>
         <form action="/sentimento" method="post">
             <label for="frase">Digite uma frase:</label>
