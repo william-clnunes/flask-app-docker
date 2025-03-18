@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise de Sentimento</title>
+    <style>
+        :root {
+            /* Paleta W3Schools - Tema Claro */
+            --background-color: #f1f1f1;
+            --container-bg: white;
+            --text-color: #000000;
+            --secondary-text: #555555;
+            --input-border: #cccccc;
+            --input-bg: white;
+            --button-color: #04AA6D; /* Verde W3Schools */
+            --button-hover: #059862;
+            --info-bg: #E7F6F2;
+            --info-border: #04AA6D;
+            --header-bg: #04AA6D;
+            --header-text: white;
+            --positive-color: #04AA6D;
+            --neutral-color: #FFC107;
+            --negative-color: #E91E63;
+        }
+        
+        [data-theme="dark"] {
+            /* Paleta W3Schools - Tema Escuro (adaptado) */
+            --background-color: #282A35; /* Cor de fundo escura do W3Schools */
+            --container-bg: #0D1721; /* Adaptado do tom escuro do W3Schools */
+            --text-color: #ffffff;
+            --secondary-text: #dddddd;
+            --input-border: #555555;
+            --input-bg: #333333;
+            --button-color: #04AA6D; /* Mantém o verde W3Schools */
+            --button-hover: #059862;
+            --info-bg: #1E2A3A;
+            --info-border: #04AA6D;
+            --header-bg: #04AA6D;
+            --header-text: white;
+            --positive-color: #04AA6D;
+            --neutral-color: #FFC107;
+            --negative-color: #E91E63;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte similar a W3Schools */
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .container {
+            background-color: var(--container-bg);
+            border-radius: 5px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+        
+        h1 {
+            color: var(--header-text);
+            text-align: center;
+            margin: -30px -30px 30px -30px;
+            padding: 20px;
+            background-color: var(--header-bg);
+            border-radius: 5px 5px 0 0;
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        
+        input[type="text"] {
+            padding: 12px;
+            border: 1px solid var(--input-border);
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+        }
+        
+        input[type="submit"] {
+            background-color: var(--button-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+        
+        input[type="submit"]:hover {
+            background-color: var(--button-hover);
+        }
+        
+        .info {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: var(--info-bg);
+            border-left: 4px solid var(--info-border);
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--secondary-text);
+            font-size: 14px;
+        }
+        
+        .theme-switch-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        
+        .theme-switch {
+            display: inline-block;
+            height: 24px;
+            position: relative;
+            width: 48px;
+        }
+        
+        .theme-switch input {
+            display: none;
+        }
+        
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            background-color: white;
+            bottom: 4px;
+            content: "";
+            height: 16px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 16px;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--button-color);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+        
+        .theme-label {
+            margin-right: 10px;
+            color: var(--text-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-switch-container">
+        <span class="theme-label">Tema Escuro</span>
+        <label class="theme-switch">
+            <input type="checkbox" id="theme-toggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+    
+    <div class="container">
+        <h1>Análise de Sentimento</h1>
+        
+        <form action="/sentimento" method="post">
+            <label for="frase">Digite uma frase em inglês para analisar:</label>
+            <input type="text" id="frase" name="frase" placeholder="Ex: Today is a wonderful day!" required>
+            <input type="submit" value="Analisar Sentimento">
+        </form>
+        
+        <div class="info">
+            <h3>Como funciona?</h3>
+            <p>Esta ferramenta utiliza processamento de linguagem natural para determinar o sentimento expresso em um texto.</p>
+            <p>A polaridade do sentimento varia de:</p>
+            <ul>
+                <li>-1.0 (extremamente negativo)</li>
+                <li>0.0 (neutro)</li>
+                <li>+1.0 (extremamente positivo)</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <p>Desenvolvido com Flask e TextBlob</p>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleSwitch = document.getElementById('theme-toggle');
+            const htmlElement = document.documentElement;
+            
+            // Verifica se há uma preferência salva no localStorage
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            htmlElement.setAttribute('data-theme', currentTheme);
+            
+            // Atualiza o estado do toggle switch com base no tema atual
+            toggleSwitch.checked = currentTheme === 'dark';
+            
+            // Adiciona o event listener para alternar o tema
+            toggleSwitch.addEventListener('change', function() {
+                if (this.checked) {
+                    htmlElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    htmlElement.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

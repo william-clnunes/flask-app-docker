@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado da Análise de Sentimento</title>
+    <style>
+        :root {
+            /* Paleta W3Schools - Tema Claro */
+            --background-color: #f1f1f1;
+            --container-bg: white;
+            --text-color: #000000;
+            --secondary-text: #555555;
+            --input-border: #cccccc;
+            --input-bg: white;
+            --button-color: #04AA6D; /* Verde W3Schools */
+            --button-hover: #059862;
+            --info-bg: #E7F6F2;
+            --info-border: #04AA6D;
+            --header-bg: #04AA6D;
+            --header-text: white;
+            --positive-color: #04AA6D; /* Verde W3Schools */
+            --neutral-color: #FFC107; /* Amarelo */
+            --negative-color: #E91E63; /* Rosa/vermelho */
+        }
+        
+        [data-theme="dark"] {
+            /* Paleta W3Schools - Tema Escuro (adaptado) */
+            --background-color: #282A35; /* Cor de fundo escura do W3Schools */
+            --container-bg: #0D1721; /* Adaptado do tom escuro do W3Schools */
+            --text-color: #ffffff;
+            --secondary-text: #dddddd;
+            --input-border: #555555;
+            --input-bg: #333333;
+            --button-color: #04AA6D; /* Mantém o verde W3Schools */
+            --button-hover: #059862;
+            --info-bg: #1E2A3A;
+            --info-border: #04AA6D;
+            --header-bg: #04AA6D;
+            --header-text: white;
+            --positive-color: #04AA6D;
+            --neutral-color: #FFC107;
+            --negative-color: #E91E63;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte similar a W3Schools */
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .container {
+            background-color: var(--container-bg);
+            border-radius: 5px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+        
+        h1 {
+            color: var(--header-text);
+            text-align: center;
+            margin: -30px -30px 30px -30px;
+            padding: 20px;
+            background-color: var(--header-bg);
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .result {
+            text-align: center;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        
+        .positive {
+            background-color: rgba(4, 170, 109, 0.1);
+            border: 1px solid var(--positive-color);
+            color: var(--positive-color);
+        }
+        
+        .neutral {
+            background-color: rgba(255, 193, 7, 0.1);
+            border: 1px solid var(--neutral-color);
+            color: var(--neutral-color);
+        }
+        
+        .negative {
+            background-color: rgba(233, 30, 99, 0.1);
+            border: 1px solid var(--negative-color);
+            color: var(--negative-color);
+        }
+        
+        .emoji {
+            font-size: 70px;
+            display: block;
+            margin-bottom: 20px;
+        }
+        
+        .value {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .description {
+            margin: 10px 0;
+        }
+        
+        .text-analyzed {
+            margin: 30px 0;
+            padding: 15px;
+            background-color: var(--info-bg);
+            border-radius: 8px;
+            font-style: italic;
+            text-align: center;
+        }
+        
+        .button {
+            background-color: var(--button-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        
+        .button:hover {
+            background-color: var(--button-hover);
+        }
+        
+        .center {
+            text-align: center;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--secondary-text);
+            font-size: 14px;
+        }
+        
+        .sentiment-meter {
+            margin: 30px auto;
+            width: 300px;
+            height: 30px;
+            background: linear-gradient(to right, var(--negative-color), var(--neutral-color), var(--positive-color));
+            border-radius: 15px;
+            position: relative;
+        }
+        
+        .pointer {
+            width: 10px;
+            height: 40px;
+            background-color: var(--text-color);
+            position: absolute;
+            top: -5px;
+            transform: translateX(-50%);
+            border-radius: 5px;
+            transition: left 0.5s;
+        }
+        
+        /* Estilo W3Schools adicional */
+        .w3-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 50%;
+            background-color: var(--button-color);
+            color: white;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Resultado da Análise de Sentimento</h1>
+        
+        <div class="text-analyzed">
+            <p>"<span id="text-content">{{ frase }}</span>"</p>
+        </div>
+        
+        <div class="sentiment-meter">
+            <div class="pointer" id="sentiment-pointer"></div>
+        </div>
+        
+        <div class="result" id="result-box">
+            <span class="emoji" id="result-emoji"></span>
+            <div class="value" id="result-value">Polaridade: {{ polaridade }}</div>
+            <div class="description" id="result-description"></div>
+        </div>
+        
+        <div class="center">
+            <a href="/" class="button">Analisar outro texto</a>
+        </div>
+        
+        <div class="footer">
+            <p>Desenvolvido com Flask e TextBlob</p>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Carrega o tema do localStorage
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            
+            // Obtém a polaridade do texto
+            const polaridade = parseFloat(document.getElementById('result-value').textContent.replace('Polaridade: ', ''));
+            
+            // Define a posição do ponteiro na barra de sentimento (0 a 300px)
+            const pointerPosition = ((polaridade + 1) / 2) * 300; // Converte -1~1 para 0~300
+            document.getElementById('sentiment-pointer').style.left = pointerPosition + 'px';
+            
+            // Define o emoji, classe e descrição com base na polaridade
+            const resultBox = document.getElementById('result-box');
+            const resultEmoji = document.getElementById('result-emoji');
+            const resultDescription = document.getElementById('result-description');
+            
+            if (polaridade > 0.3) {
+                resultBox.classList.add('positive');
+                resultEmoji.innerHTML = '😄';
+                if (polaridade > 0.7) {
+                    resultDescription.textContent = 'Sentimento muito positivo!';
+                } else {
+                    resultDescription.textContent = 'Sentimento positivo.';
+                }
+            } else if (polaridade < -0.3) {
+                resultBox.classList.add('negative');
+                resultEmoji.innerHTML = '😞';
+                if (polaridade < -0.7) {
+                    resultDescription.textContent = 'Sentimento muito negativo!';
+                } else {
+                    resultDescription.textContent = 'Sentimento negativo.';
+                }
+            } else {
+                resultBox.classList.add('neutral');
+                resultEmoji.innerHTML = '😐';
+                resultDescription.textContent = 'Sentimento neutro.';
+            }
+        });
+    </script>
+</body>
+</html>
